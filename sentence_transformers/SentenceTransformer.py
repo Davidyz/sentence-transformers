@@ -1544,7 +1544,7 @@ print(similarities)
             backend=self.backend,
         )
         pooling_model = Pooling(transformer_model.get_word_embedding_dimension(), "mean")
-        self.model_card_data.set_base_model(model_name_or_path, revision=revision)
+        self.model_card_data.set_base_model(model_name_or_path, revision=revision, offline_mode=local_files_only)
         return [transformer_model, pooling_model]
 
     def _load_module_class_from_ref(
@@ -1762,7 +1762,7 @@ print(similarities)
                 revision_path_part = Path(modules_json_path).parts[-2]
                 if len(revision_path_part) == 40:
                     revision = revision_path_part
-        self.model_card_data.set_base_model(model_name_or_path, revision=revision)
+        self.model_card_data.set_base_model(model_name_or_path, revision=revision, offline_mode=local_files_only)
         return modules, module_kwargs
 
     @staticmethod

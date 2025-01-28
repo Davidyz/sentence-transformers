@@ -731,15 +731,18 @@ class SentenceTransformerModelCardData(CardData):
     def set_model_id(self, model_id: str) -> None:
         self.model_id = model_id
 
-    def set_base_model(self, model_id: str, revision: str | None = None) -> None:
-        try:
-            model_info = get_model_info(model_id)
-        except Exception:
-            # Getting the model info can fail for many reasons: model does not exist, no internet, outage, etc.
-            return False
-        self.base_model = model_info.id
-        if revision is None or revision == "main":
-            revision = model_info.sha
+    def set_base_model(self, model_id: str, revision: str | None = None, offline_mode: bool = False) -> None:
+        if offline_mode:
+            self.base_model = model_id
+        else:
+            try:
+                model_info = get_model_info(model_id)
+            except Exception as e:
+                # Getting the model info can fail for many reasons: model does not exist, no internet, outage, etc.
+                return False
+            self.base_model = model_info.id
+            if revision is None or revision == "main":
+                revision = model_info.sha
         self.base_model_revision = revision
         return True
 
